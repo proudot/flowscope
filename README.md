@@ -1,4 +1,4 @@
-# README for bash-based us on biohpc (Danuser lab)
+# README for bash-based use on biohpc (Danuser lab)
 
 ## Compilation
 
