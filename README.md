@@ -18,7 +18,7 @@ sh compOF.sh
 To visualize results
 ```
 cd sh-script/
-sh compOF.sh
+sh view-res.sh
 ```
 
 # Original README for python
