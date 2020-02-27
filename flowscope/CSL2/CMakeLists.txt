@@ -1,0 +1,213 @@
+# File : ---- CMakeLists.txt
+# Date : 22/01/2013
+# Author : Tristan Lecorgne
+# INRIA Serpico team
+#
+# Description : This file can be used in order to prepare the build of a cimg project
+#
+# Usage :
+#    - Read all the comments
+#    - Put your preferences in the line that ends with a "# EDIT"
+#
+
+#-----------------------------------------------------------------------------
+### Paths
+
+#
+# If your system use atypical developpement folders, uncomment and set the following variables.
+# This is useful on Windows systems in particular.
+# Note: \ needs to be escaped (example C:\\include)
+#
+
+#set (CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "your include path") # EDIT 
+#set (CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "your library path") # EDIT
+
+#-----------------------------------------------------------------------------
+### Check CMake version
+cmake_minimum_required (VERSION 2.8.0 FATAL_ERROR)
+
+
+# find_package(EnvModules REQUIRED)
+# env_module(purge)
+# env_module(load shared)
+# env_module(load gcc/8.3.0)
+
+
+#-----------------------------------------------------------------------------
+
+#set(CMAKE_C_COMPILER "/usr/local/bin/gcc")
+#set(CMAKE_CXX_COMPILER "/usr/local/bin/g++")
+#if(NOT DEFINED CMAKE_C_COMPILER)
+#set(CMAKE_C_COMPILER /usr/bin/cc)
+#endif()
+#if(NOT DEFINED CMAKE_CXX_COMPILER)
+#set(CMAKE_CXX_COMPILER /usr/bin/c++)
+#endif()
+#set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 11)
+#ADD_DEFINITIONS(
+#   -std=c++0x
+#    # Other flags
+#)
+set (CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3")
+### Set project name
+project(CTvar) # EDIT : put your project name
+#file(GLOB LIBRARIES "/opt/X11/lib/*.dylib")
+##-----------------------------------------------------------------------------
+### Add our own CMake modules to the find_package search path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
+
+
+#-----------------------------------------------------------------------------
+### Compilation
+
+# default compilation is release
+if (NOT CMAKE_BUILD_TYPE MATCHES DEBUG)
+    set (CMAKE_BUILD_TYPE "DEBUG")
+endif (NOT CMAKE_BUILD_TYPE MATCHES DEBUG)
+
+message ("")
+message ("Configuring ${PROJECT_NAME} in ${CMAKE_BUILD_TYPE} mode")
+
+# warning
+set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -W -ansi -pedantic -fpermissive")
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -W -ansi -pedantic -fpermissive")
+set (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -w -fpermissive")
+set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -w -fpermissive")
+
+# optimisation
+if (MINGW OR CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+    set (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2")
+    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
+endif (MINGW OR CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+if (MSVC OR MSVC_IDE OR MSVC60 OR  MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10)
+    set (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /O2")
+    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")        
+endif (MSVC OR MSVC_IDE OR MSVC60 OR  MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10)
+
+# debug
+set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Dcimg_debug=3")
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Dcimg_debug=3")
+
+
+#-----------------------------------------------------------------------------
+### CIMG Support
+
+#
+# CIMG is very flexible and makes use of optional third party libraries.
+# The following lines allow you to select which libraries you need to compile your project.
+#
+# When set to ON, cmake will search for the lib on the system and crash if it's absent. 
+#   If present, the program will be linked to this library
+#
+# When set to OFF, cmake will ignore this library and the program will not use its functionnalities.
+#   In consequence, the part of the code in CImg.h within the macro "#ifdef cimg_use_xxx" will not be compiled.
+#
+
+option (USE_DISPLAY_LIBS "Set to off if your application does not use any display (=> cimg_diplay=0)" ON) # EDIT
+option (USE_JPEG_LIBS "Set to off if you don't need libjpeg (=> cimg_use_jpeg undefined)" ON) # EDIT
+option (USE_PNG_LIBS "Set to off if you don't need libpng (=> cimg_use_png undefined)" ON) # EDIT
+option (USE_TIFF_LIBS "Set to off if you don't need libtiff (=> cimg_use_tiff undefined)" ON) # EDIT
+option (USE_LAPACK_LIBS "Set to off if you don't need lapack libraries (=> cimg_use_lapack undefined)" OFF) # EDIT
+option (USE_BOARD_LIBS "Set to off if you don't need libboard (=> cimg_use_board undefined)" OFF) # EDIT
+option (USE_FFMPEG_LIBS "Set to off if you don't need libffmpeg (=> cimg_use_ffmpeg undefined)" OFF) # EDIT
+option (USE_FFTW3_LIBS "Set to off if you don't need libfftw3 (=> cimg_use_fftw3 undefined)" OFF) # EDIT
+option (USE_MAGICK_LIBS "Set to off if you don't need libmagick++ (=> cimg_use_magick undefined)" OFF) # EDIT
+
+
+
+#
+# Call findCIMG.cmake and use the variables defined by it
+#
+find_package (CIMG)
+add_definitions (${CIMG_DEFINITIONS})
+add_definitions (-Dcimg_use_vt100)
+include_directories (${CIMG_INCLUDE_DIRS})
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CIMG_C_FLAGS}")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CIMG_CXX_FLAGS}")
+
+
+
+#-----------------------------------------------------------------------------
+### Add project directories to include path.
+include_directories (
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+
+
+
+
+
+#-----------------------------------------------------------------------------
+### Executables
+
+#
+# Here you can declare what executable you want to compile with cmake commands. 
+# For example :
+# - add_executable (myExecutable myExecutable.cpp myExecutable.h otherRequiredFile.h ...)
+# - add_library (myLibrary myLibrary.cpp ...)
+# - target_link_libraries (myExecutable myLibrary  ...)
+#
+# Then, link ${CIMG_LIBRARIES} with your executables :
+#
+# - target_link_libraries (myExecutable ${CIMG_LIBRARIES})
+#
+# For more information on these commands and on other possible commands, go to cmake.org
+#
+
+
+
+
+set ( Multisizeint_SRCS
+        Main.cpp
+        )
+
+
+
+
+
+#SET(GCC_COVERAGE_LINK_FLAGS    "-lboost_serialization -lboost_filesystem")
+
+#SET( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}" )
+
+add_executable(
+        CTvar
+        CSVAR.h
+        CSVAR.cpp
+        splinterp.h
+        imagederivatives.cpp
+        ${Multisizeint_SRCS} )
+
+target_compile_options(CTvar PRIVATE)
+
+target_link_libraries(CTvar  ${CIMG_LIBRARIES})
+
+
+#
+# Use the Widgets module from Qt 5.
+#
+#target_link_libraries(Qt5::Widgets)
+#-----------------------------------------------------------------------------
+### Installation
+
+#
+# Here you can specify which programs and libraries should be copied on the system when user run "make install"
+# Uncomment the following INSTALL command and replace myExecutable and myLibrary by the names of your application binaries
+#
+
+#INSTALL(TARGETS myExecutable myLibrary
+#  RUNTIME DESTINATION bin
+#  LIBRARY DESTINATION lib
+#)
+
+#
+# If you install a library, you may want to install include files.
+# Uncomment the following INSTALL command and replace myInclude1.h and myInclude2.h by the names of the files you want to install
+#
+
+#INSTALL(FILES myInclude1.h myInclude2.h
+#  DESTINATION include)
+

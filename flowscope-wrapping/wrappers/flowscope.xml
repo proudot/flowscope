@@ -1,0 +1,18 @@
+<tool id="flowscope" name="FlowScope" version="1.0.0" >
+	<description>
+		The method is based on variational approach.
+		The data term is derived from 3D Census signature constancy assumption.
+		Quadratic penalizers are used for the data term and the regularizer.
+		SOR iteration is used to solve the associated Euler-Lagrange equations.
+	</description>
+	<command>
+		../../flowscope/CSL2/build/CTvar -s ${-s} -t ${-t} -o ${-o}
+	</command>
+	<inputs>
+		<data format="image" name="-s" label="Source volume file"/>
+		<data format="image" name="-t" label="Target volume file"/>
+	</inputs>
+	<outputs>
+		<data format="image" name="-o" label="Output image"/>
+	</outputs>
+</tool>

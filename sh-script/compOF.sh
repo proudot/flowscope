@@ -1,0 +1,5 @@
+module load cmake/3.10.2
+module load gcc/8.3.0
+module load tiff/gcc/4.0.7
+mkdir /tmp/test
+../flowscope/CSL2/build/CTvar -s ../mv3blebbing/1_CAM01_000004.tif -t ../mv3blebbing/1_CAM01_000008.tif -o /tmp/test/
