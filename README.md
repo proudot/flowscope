@@ -1,4 +1,4 @@
-# README for bash-based us on biohpc (Danuser lab)
+# README for bash-based use on biohpc (Danuser lab)
 
 ## Compilation
 
@@ -18,7 +18,7 @@ sh compOF.sh
 To visualize results
 ```
 cd sh-script/
-sh compOF.sh
+sh view-res.sh
 ```
 
 # Original README for python
