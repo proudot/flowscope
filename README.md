@@ -9,16 +9,21 @@ sh buildonbiohpc.sh
 
 ## Test run
 
-To run the computation on test data
+To run the computation on test data. 
 ```
 cd sh-script/
 sh compOF.sh
 ```
 
-To visualize results
+To visualize results on the all stack
 ```
 cd sh-script/
 sh view-res.sh
+```
+To visualize results on a selected crop
+```
+cd sh-script/
+sh view-blended-crop.sh
 ```
 
 # Original README for python

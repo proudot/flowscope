@@ -1,0 +1,22 @@
+module load cmake/3.10.2
+module load gcc/8.3.0
+module load tiff/gcc/4.0.7
+export outputFolder=/archive/bioinformatics/Danuser_lab/softwareDevelopment/analysis/proudot/cytodi-OF3D/analysis/flowScopTestFolder/
+mkdir $outputFolder
+
+datFolder=/home2/proudot/soft-proudot/cytodi-OF3D/analysis/testData/
+
+module load parallel
+# parallel --dryrun gmic $datFolder/{1} -a z  $datFolder/{2} -a[1--1] z -a c \
+# 	 ::: $inputVol ::: $targetVol
+
+export filePattern=$datFolder/1_CAM01_%.6d.tif
+echo $filePattern
+
+parallel 'source=$(printf "$filePattern" {}); target=$(printf "$filePattern" $(({}+1))); \
+	  ../flowscope/CSL2/build/CTvar -s $source  -t $target -o $outputFolder ' ::: $(seq 0 8)
+
+
+# Compute magnitude
+#gmic $outputFolder/*soru.tif -a z -l[] $outputFolder/*sorv.tif -a z -endl -l[] $outputFolder/*soru.tif -a z -endl -a c \
+ #    -normp 2 -o $outputFolder/mag.tif
