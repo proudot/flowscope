@@ -78,14 +78,14 @@ named flowscope.ipynb which is the starting point to run the code.
 2) In the terminal, run command: jupyter notebook
 A browser will open with a notebook. If it does not open a browser window, the following prompt may appear:
 
-=====================================================================
+```
 To access the notebook, open this file in a browser:
 file:///Users/smanandh/Library/Jupyter/runtime/nbserver-3595-open.html
 Or copy and paste one of these URLs:
 http://localhost:8889/?token=d79ad1dd40cac12e85c2c52f88b314cee9d39df610c4e502
 or http://127.0.0.1:8889/?token=d79ad1dd40cac12e85c2c52f88b314cee9d39df610c4e502
 0:86: execution error: "file:///Users/smanandh/Library/Jupyter/runtime/nbserver-3595-open.html" doesn’t understand the “open location” message. (-1708)
-======================================================================
+```
 
 In this case, simply copy paste the url with localhost address in your internet browser, for e.g.
 
@@ -104,13 +104,13 @@ http://localhost:8889/?token=d79ad1dd40cac12e85c2c52f88b314cee9d39df610c4e502
 
 a) In the section "Load the data", make sure to set the path of source and target volumes correctly.
 b) Once the section "Interactive parameters selection" is ran, two sliders will appear below the section.
-==================================================
+```
 Gamma slider controls smoothness of the field. 
 Set it to around 0.1-0.2.
 
 Maximum_iteration slider controls the interation number (it larger the iteration, the longer it takes to compute). 
 Set it to 5-10
-=====================================================
+```
 
 d) The u,v,w components or (x,y,z) displacements are saved separately in the output folder.
 
